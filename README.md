@@ -7,7 +7,7 @@ In this repository you will find my homework assignments for the course [STAT 54
 
 - My name is Erika Luna
 - I was born and raised in Mexico City
-- My favourite hobbie is playing Ultimate Frisbee. 
+- My favourite hobbie is playing Ultimate Frisbee
 
 ![](https://media1.tenor.com/images/342fafa73d2710601ffe140220edef0a/tenor.gif?itemid=4242683)
 
