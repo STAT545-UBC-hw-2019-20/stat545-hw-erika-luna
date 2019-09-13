@@ -12,7 +12,7 @@ In this repository you will find my homework assignments for the course [STAT 54
 ![](https://media1.tenor.com/images/342fafa73d2710601ffe140220edef0a/tenor.gif?itemid=4242683)
 
 
-## Research :neckbeard:
+## Research :mag:
 
 - I'm an incoming MSc at the [Institute for Resources, Environment and Sustainability](http://ires.ubc.ca/)
 - I'm co-supervised by [Dr. Navin Ramankutty](http://www.ramankuttylab.com/) and [Dr. Amanda Giang](https://www.leap-ires.org/)
