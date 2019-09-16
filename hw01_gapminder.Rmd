@@ -1,0 +1,42 @@
+---
+title: "hw01_gapminder"
+author: "Erika Luna"
+date: "13/09/2019"
+output: 
+  html_document:
+    keep md: true
+    toc: false
+    number_sections: false
+    toc_float: true
+---
+
+## Exploring Gapminder dataset using R Markdown
+
+The Gapminder dataset is available in R:
+
+```{r}
+library(gapminder)
+```
+
+Below is a summary of the data: 
+```{r}
+summary(gapminder)
+```
+The Gapminder data set has 6 variables:
+
+```{r}
+names(gapminder)
+```
+
+Gapminder encompasses 55 years of data, from 1952 to 2007. 
+```{r}
+range(gapminder$year, na.rm = TRUE)
+```
+
+The following plot shows the population in each continent:
+```{r}
+library(ggplot2)
+ggplot(gapminder, aes(continent, pop)) + 
+  geom_col()
+```
+
