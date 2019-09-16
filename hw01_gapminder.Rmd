@@ -4,10 +4,10 @@ author: "Erika Luna"
 date: "13/09/2019"
 output: 
   html_document:
-    keep md: true
-    toc: false
-    number_sections: false
-    toc_float: true
+    keep_md: TRUE
+    toc: FALSE
+    number_sections: FALSE
+    toc_float: TRUE
 ---
 
 ## Exploring Gapminder dataset using R Markdown
