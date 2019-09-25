@@ -28,6 +28,7 @@ gapminder_modified <- filter(gapminder, year < 1980 & year > 1970 &
        country == "Brazil" |
          country == "Israel" |
          country == "Portugal")
+gapminder_modified
 ```
 
 ## 1.2
@@ -61,13 +62,13 @@ gapminder %>%
   filter(country == 'Canada') %>% 
   ggplot(aes(lifeExp, gdpPercap)) +
   geom_point() +
-  scale_x_log10()
+  scale_y_log10()
 ```
 
 
 ## Exercise 2
 
-Categorical variable: Continet
+Categorical variable: Continent
 
 There are 5 possible values for the variable Continent:
 
