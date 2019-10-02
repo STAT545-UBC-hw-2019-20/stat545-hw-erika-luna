@@ -11,6 +11,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+In this assignment we will explore the gapminder dataset using the dplyr package. Before we start we need to load a couple of packages. 
 
 
 ```{r, warning = FALSE, message = FALSE}
@@ -21,30 +22,28 @@ library(DT)
 library(knitr)
 ```
 
-#Instructions
-
-In this assignment we will explore the gapminder dataset using the dplyr package.
+I have decided to work on tasks 2, 3 and 6.
 
 ## Task Option 2
+Instructions: Get the maximum and minimum of GDP per capita for all continents.
 
-Get the maximum and minimum of GDP per capita for all continents.
+We first produce a tibble (a type of data frame).
 
 ```{r tibble task2}
-tmp <- gapminder %>% 
-  group_by(continent) %>% 
-  summarise(min_gdp = min(gdpPercap),
+task_2 <- gapminder %>% #We name our modified dataset
+  group_by(continent) %>% #We use this function in order to obtain the information at the continent level.
+  summarise(min_gdp = min(gdpPercap), #then we use this function in order to obtain the maximum and minimum of GDP per capita. 
             max_gdp = max(gdpPercap))
-  #knitr::kable()
-
-tmp
+  
+task_2
 ```
 
-
+From the tibble we produced above, we now create a plot. 
 
 ```{r plot task2}
-tmp %>% 
-  ggplot(aes())+
-  geom_point(aes(continent,max_gdp, colour = "red"))+
+task_2 %>% 
+  ggplot(aes())+ #We can plot the GDP max and min in the same plot by using geom_point twice. We could also use some other type of "geom". 
+  geom_point(aes(continent,max_gdp, colour = "red"))+ 
   geom_point(aes(continent,min_gdp, colour = "blue"))+
   labs(title="Minimum and maximum GDP of each continet",
                x="Continent",
@@ -60,12 +59,13 @@ tmp %>%
 
 ## Task Option 3
 
-Look at the spread of GDP per capita within the continents.
+Instructions: Look at the spread of GDP per capita within the continents.
 
+We first create a table. 
 ```{r tibble task3}
 gapminder %>% 
   group_by(continent) %>% 
-  summarize(max_gdpPercap = max(gdpPercap),
+  summarize(max_gdpPercap = max(gdpPercap),#We can use a couple of different functions within the summarize function. 
             min_gdpPercap = min(gdpPercap),
             range_gdpPercap = max(gdpPercap)-min(gdpPercap),
             sd_gdpPercap = sd(gdpPercap),
@@ -74,12 +74,12 @@ gapminder %>%
   knitr::kable()
 ```
 
-
-```{r plot tisk3}
+Now we create a plot.
+```{r plot task3}
 gapminder %>% 
   ggplot(aes(continent, gdpPercap)) +
-  geom_boxplot() +
-  scale_y_log10(labels = scales::dollar_format()) +
+  geom_boxplot() + #We use this type of "geom" as we want to show the spread of GDP.
+  scale_y_log10(labels = scales::dollar_format()) + #We can add a dollar sign to the values on the y axis.
   labs(title = "Spread of GDP per capita for all continents", 
        x = "Continent", 
        y = "GDP per capita")
@@ -89,9 +89,9 @@ gapminder %>%
 
 ## Task Option 5
 
-How is life expectancy changing over time on different continents?
+Instructions: How is life expectancy changing over time on different continents?
 
-
+As before, we first create a table that shows the average life expectancy for each continent for each year. 
 ```{r tibble task5}
 gapminder %>% 
   group_by(continent, year) %>% 
@@ -99,11 +99,11 @@ gapminder %>%
   DT::datatable()
 ```
 
-
+Now we create a plot: 
 ```{r plot task5}
 gapminder %>% 
   ggplot(aes(year, lifeExp, group = country, colour = continent)) +
-  geom_jitter(size = 1, alpha = 0.5)+
+  geom_jitter(size = 1, alpha = 0.5)+ #We use geom_jitter to show the behaviour of each country within each continent. 
   geom_line()+
   facet_wrap(~ continent, nrow = 3)  +
   labs(title = "Change of life expectancy over time", 
