@@ -1,1 +1,1 @@
-https://stat545-ubc-hw-2019-20.github.io/stat545-hw-erika-luna/hw04/hw04.html
+For some reason that I cannot understand (I've tried for hours), the R Markdown document is not properly knitted. I put a [link](https://stat545-ubc-hw-2019-20.github.io/stat545-hw-erika-luna/hw04/hw04.html) here in case it eventually updates.
