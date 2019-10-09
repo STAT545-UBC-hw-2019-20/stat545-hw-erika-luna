@@ -21,7 +21,16 @@ library(DT)
 library(devtools)
 ```
 
-#Exercise 1 - Univariate option 1:
+#Exercise 1: Univariate Data Reshaping
+
+##Univariate option 1
+I've chose this option, for which I will need to:
+
+1.1 Make a tibble with one row per year, and columns for life expectancy for two or more countries.
+1.2 Take advantage of this new data shape to scatterplot life expectancy for one country against that of another.
+1.3 Re-lengthen the data.
+
+##1.1 
 
 ```{r}
 dat = gapminder %>%
@@ -31,10 +40,10 @@ dat = gapminder %>%
               names_from = country,
               names_prefix = "lifeExp_",
               values_from = lifeExp)
-
 DT::datatable(dat)
 ```
 
+##1.2
 ```{r}
 axis_lim = c(min(dat$lifeExp_Mexico, dat$lifeExp_Canada),
              max(dat$lifeExp_Mexico , dat$lifeExp_Canada))
@@ -50,6 +59,8 @@ dat %>%
   theme_bw() +
   theme(legend.position = "none")
 ```
+
+##1.3
 ```{r}
 dat %>%
   pivot_longer(cols = c(lifeExp_Mexico, lifeExp_Canada),
@@ -59,9 +70,17 @@ dat %>%
   DT::datatable()
 ```
 
-#Exercise 2 / Multivariate Option 1: 
-##Make a tibble with one row per year, and columns for life expectancy and GDP per capita (or two other numeric variables) for two or more countries.
+#Exercise 2: Multivariate Data Reshaping
 
+##Multivariate Option 1: 
+I've chosen this option, for which I will need to:
+
+2.1 Make a tibble with one row per year, and columns for life expectancy and GDP per capita (or two other numeric variables) for two or more countries.
+
+2.2 Re-lengthen the data.
+
+
+##2.1
 ```{r}
 dat = gapminder %>%
   filter(country == "Mexico" | country == "Canada") %>%
@@ -73,7 +92,7 @@ dat = gapminder %>%
 DT::datatable(dat)
 ```
 
-##Re-lengthen the data.
+##2.2
 
 ```{r}
 dat %>%
@@ -86,12 +105,16 @@ dat %>%
 
 #Exercise 3: Table Joins
 
+For this exercise wee need to load the following datasets: 
+
 ```{r echo = FALSE, warning = FALSE, message = FALSE}
 guest <- read_csv("https://raw.githubusercontent.com/STAT545-UBC/Classroom/master/data/wedding/attend.csv")
 email <- read_csv("https://raw.githubusercontent.com/STAT545-UBC/Classroom/master/data/wedding/emails.csv")
 ```
 
 ##3.1
+
+For each guest in the guestlist (guest tibble), add a column for email address, which can be found in the email tibble.
 
 
 ```{r}
@@ -100,29 +123,26 @@ email_modified <-
   rename(name = guest)
 
 guest %>% 
-  left_join(email_modified, by = "name")
-  
-#DT::datatable(email_modified)
+  left_join(email_modified, by = "name") %>% 
+  DT::datatable(options = list(scrollX = TRUE))
 ```
 
 ##3.2
 
+Who do we have emails for, yet are not on the guestlist?
+
 ```{r}
 non_guest <- email_modified %>%
   anti_join(guest, by = "name")
-
-
   knitr::kable(non_guest)
 ```
 
-##3.3: Make a guestlist that includes everyone we have emails for (in addition to those on the original guestlist).
+##3.3
+
+Make a guestlist that includes everyone we have emails for (in addition to those on the original guestlist).
 
 ```{r}
-bind_rows(email_modified, non_guest) %>% 
+guest %>% 
+  full_join(email_modified, by = "name") %>%
   DT::datatable()
 ```
-
-
-
-
-
