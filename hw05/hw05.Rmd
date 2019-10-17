@@ -15,15 +15,16 @@ library(here)
 library(tsibble)
 library(cowplot)
 library(ggplot2)
+library(cowplot)
 knitr::opts_chunk$set(fig.width=4, fig.height=3, warning = FALSE, fig.align = "center")
-#knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
 # Exercise 1: Explain the value of the here::here package
-```{r}
 
-```
+The 'here' function from the 'here' package is very useful to do a couple of things faster, such as navigating in our project's directory. 
+
+'here' is also a useful function when shraing code, because it doesn't matter the operating system that our collabotators use, this function runs independently. 
 
 
 
@@ -109,10 +110,13 @@ gap_europe %>%
 
 # Exercise 3: File input/output (I/O)
 
-Let's say we are interested in sharing the data for America with our collegues. We first have to filter our gapminder data. 
+Let's say we are interested in sharing the data for North America with our collegues. We first have to filter our gapminder data. 
 ```{r}
 gapminder_ame <- gapminder %>% 
-  filter(continent == "Americas")
+  filter(continent == "Americas") %>% 
+  filter(country == "Canada" |
+         country == "Mexico" |
+         country == "United States")
 ```
 
 Now we write a csv of the filtered data.
@@ -128,7 +132,7 @@ gapminder_ame_csv <- read_csv(here("hw05", "gapminder_ame.csv"))
 gapminder_ame_csv %>%
   knitr::kable()
 ```
-
+However, notice that the variable country has now become a character: 
 ```{r}
 class(gapminder_ame_csv$country)
 class(gapminder_ame_csv$continent)
@@ -138,6 +142,7 @@ class(gapminder_ame_csv$pop)
 class(gapminder_ame_csv$gdpPercap)
 ```
 
+To make it a factor again we do the following: 
 ```{r}
 gapminder_ame_csv %>% 
   mutate(country = fct_reorder(country, pop, .desc = TRUE)) %>% 
@@ -163,12 +168,17 @@ new_plot <- gapminder %>%
   ylab("Population") +
   xlab("Continent") +
   scale_y_continuous(labels = scales::comma) +
-  theme_light()
+  theme_light() +
+  theme(panel.border = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.ticks = element_blank(),
+        axis.text = element_blank())
 ```
 
 ```{r}
 plots <- plot_grid(old_plot, new_plot, ncol = 2,
-          labels = c("Old plot", "New plot"))
+          labels = c("Old plot", "New plot")) 
 ```
 
 
@@ -189,6 +199,7 @@ ggsave(plots_file,
        width = 10, height = 4,
        scale = 1.5)
 ```
+
 
 
 
