@@ -1,0 +1,201 @@
+---
+title: "Homework 5"
+author: "Erika Luna"
+date: "October 16, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(gapminder)
+library(dplyr)
+library(DT)
+library(knitr)
+library(here)
+library(tsibble)
+library(cowplot)
+library(ggplot2)
+knitr::opts_chunk$set(fig.width=4, fig.height=3, warning = FALSE, fig.align = "center")
+#knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Exercise 1: Explain the value of the here::here package
+```{r}
+
+```
+
+
+
+# Exercise 2: Factor management
+
+Task: Choose one dataset (of your choice) and a variable to explore. After ensuring the variable(s) you are exploring are indeed factors, you should:
+
+```{r}
+str(gapminder$continent)
+```
+
+
+## 2.1: Drop factor / levels
+
+```{r, warning = FALSE, message = FALSE}
+gapminder$continent %>% 
+  nlevels() 
+```
+
+```{r}
+nrow(gapminder)
+```
+
+
+```{r}
+gapminder_dropped <- gapminder %>% 
+  filter(continent == c("Asia", "Europe", "Americas", "Africa")) %>% 
+  droplevels()
+```
+
+```{r}
+gapminder_dropped$continent %>% 
+  nlevels()
+```
+```{r}
+gapminder_dropped %>% 
+  nrow()
+```
+
+
+
+## 2.2 Reorder levels based on knowledge from data
+
+```{r}
+gap_maxlife <- gapminder_dropped %>% 
+  group_by(continent, country) %>% 
+  summarize(max_lifeExp = max(lifeExp))
+```
+
+```{r}
+gap_maxlife$country %>% 
+  nlevels()
+```
+
+```{r}
+gap_europe <- gap_maxlife %>% 
+  filter(continent == "Europe") %>% 
+  droplevels()
+```
+
+
+```{r}
+gap_europe %>% 
+  ggplot() +
+  geom_point(aes(country, max_lifeExp)) +
+  ylab("Maximum life expectancy (yeas)") +
+  xlab("Country") +
+  coord_flip() +
+  theme_light()
+```
+
+
+
+```{r}
+gap_europe %>% 
+  ggplot() +
+  geom_point(aes(fct_reorder(country, max_lifeExp, min), max_lifeExp)) +
+  ylab("Maximum life expectancy (years)") +
+  xlab("Country") +
+  coord_flip() +
+  theme_light()
+```
+
+# Exercise 3: File input/output (I/O)
+
+Let's say we are interested in sharing the data for America with our collegues. We first have to filter our gapminder data. 
+```{r}
+gapminder_ame <- gapminder %>% 
+  filter(continent == "Americas")
+```
+
+Now we write a csv of the filtered data.
+```{r}
+write_csv(gapminder_ame,
+          here::here("hw05", "gapminder_ame.csv"))
+```
+Now, when our collegues open the file, they would use the function 'read_csv'. 
+
+```{r}
+gapminder_ame_csv <- read_csv(here("hw05", "gapminder_ame.csv"))
+
+gapminder_ame_csv %>%
+  knitr::kable()
+```
+
+```{r}
+class(gapminder_ame_csv$country)
+class(gapminder_ame_csv$continent)
+class(gapminder_ame_csv$year)
+class(gapminder_ame_csv$lifeExp)
+class(gapminder_ame_csv$pop)
+class(gapminder_ame_csv$gdpPercap)
+```
+
+```{r}
+gapminder_ame_csv %>% 
+  mutate(country = fct_reorder(country, pop, .desc = TRUE)) %>% 
+  arrange(continent)
+```
+
+
+
+# Exercise 4
+
+On Assignment 1 I made the graph shown below. At the time it seemed nice to me, but now that I've learned how to make pretty and most importantly, informative graphs with ggplot I will change some aspects if it. 
+
+```{r}
+old_plot <- ggplot(gapminder, aes(continent, pop)) + 
+  geom_col()
+```
+
+```{r}
+new_plot <- gapminder %>% 
+  ggplot() +
+  geom_col(aes(reorder(continent, -pop), pop)) +
+  ylab("Population") +
+  xlab("Continent") +
+  scale_y_continuous(labels = scales::comma) +
+  theme_light()
+```
+
+```{r}
+plots <- plot_grid(old_plot, new_plot, ncol =,
+          labels = c("Old plot", "New plot"))
+
+plots
+```
+
+
+
+# Exercise 5: Writing figures to file
+
+Task: Use ggsave() to explicitly save a plot to file. Include the exported plot as part of your repository and assignment.
+
+```{r}
+plots_file <- "plots.png" #file name
+
+plot_path <- here::here("hw05", "plots") #path
+
+ggsave(plots_file, plots, device = "png", path = plot_path, width = 10, height = 4)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
