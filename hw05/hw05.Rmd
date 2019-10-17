@@ -148,7 +148,8 @@ gapminder_ame_csv %>%
 
 # Exercise 4
 
-On Assignment 1 I made the graph shown below. At the time it seemed nice to me, but now that I've learned how to make pretty and most importantly, informative graphs with ggplot I will change some aspects if it. 
+On Assignment 1 I made the graph shown below. At the time it seemed nice to me, but now that I've learned how to make pretty and most importantly, informative graphs with ggplot I will change some aspects if it.
+
 
 ```{r}
 old_plot <- ggplot(gapminder, aes(continent, pop)) + 
@@ -166,10 +167,8 @@ new_plot <- gapminder %>%
 ```
 
 ```{r}
-plots <- plot_grid(old_plot, new_plot, ncol =,
+plots <- plot_grid(old_plot, new_plot, ncol = 2,
           labels = c("Old plot", "New plot"))
-
-plots
 ```
 
 
@@ -183,7 +182,12 @@ plots_file <- "plots.png" #file name
 
 plot_path <- here::here("hw05", "plots") #path
 
-ggsave(plots_file, plots, device = "png", path = plot_path, width = 10, height = 4)
+ggsave(plots_file, 
+       plots, 
+       device = "png", 
+       path = plot_path, 
+       width = 10, height = 4,
+       scale = 1.5)
 ```
 
 
