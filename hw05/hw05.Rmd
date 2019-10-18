@@ -157,7 +157,7 @@ class(gapminder_ame_csv$country)
 
 
 
-# Exercise 4
+# Exercise 4: Visualization design
 
 On Assignment 1 I made the graph shown below. At the time it seemed nice to me, but now that I've learned how to make pretty and most importantly, informative graphs with ggplot I will change some aspects if it.
 
