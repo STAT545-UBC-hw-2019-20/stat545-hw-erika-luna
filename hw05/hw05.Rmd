@@ -22,43 +22,51 @@ knitr::opts_chunk$set(fig.width=4, fig.height=3, warning = FALSE, fig.align = "c
 
 # Exercise 1: Explain the value of the here::here package
 
-The 'here' function from the 'here' package is very useful to do a couple of things faster, such as navigating in our project's directory. 
+The 'here' function from the 'here' package is very useful to do a couple of things faster, such as navigating in our project's directory. Since 'here' knows the root directory in R, navigating through out subdirectories becomes a lot easier as we do not have to specify the whole directory. 
 
-'here' is also a useful function when shraing code, because it doesn't matter the operating system that our collabotators use, this function runs independently. 
+'here' is also a useful function when sharing code, because it doesn't matter the operating system (Windows, Linux, etc.) that our collabotators use, this function runs independently. 
 
 
 
 # Exercise 2: Factor management
 
-Task: Choose one dataset (of your choice) and a variable to explore. After ensuring the variable(s) you are exploring are indeed factors, you should:
+Task: Choose one dataset (of your choice) and a variable to explore. After ensuring the variable(s) you are exploring are indeed factors you should 2.1 drop factors / levels and 2.2. reorder levels based on knowledge from data.
+
+When applying the str function to continent we can know what type of variable "continent" is.
 
 ```{r}
 str(gapminder$continent)
 ```
-
+The result above shows us that continent is a factor with 5 levels (5 continents).
 
 ## 2.1: Drop factor / levels
 
+To show more explicitly how many levels are in continent we can use the function nlevels().
 ```{r, warning = FALSE, message = FALSE}
 gapminder$continent %>% 
   nlevels() 
 ```
 
+To know how many observations are in our dataset we use the nrow() function.
 ```{r}
 nrow(gapminder)
 ```
 
-
+If we want to drop a level from our dataset, we use the droplevels() function. 
+In the following code, we drop Oceania from our dataset by filtering our data with all continents, but Oceania.
 ```{r}
 gapminder_dropped <- gapminder %>% 
   filter(continent == c("Asia", "Europe", "Americas", "Africa")) %>% 
   droplevels()
 ```
 
+Now we look into our modified dataset to see how many levels we ended up with. 
 ```{r}
 gapminder_dropped$continent %>% 
   nlevels()
 ```
+And also how many observations. 
+
 ```{r}
 gapminder_dropped %>% 
   nrow()
@@ -68,16 +76,21 @@ gapminder_dropped %>%
 
 ## 2.2 Reorder levels based on knowledge from data
 
+Now we reorder the levels based on the maximum life expectancy for each of our levels (continents).
+
 ```{r}
 gap_maxlife <- gapminder_dropped %>% 
   group_by(continent, country) %>% 
   summarize(max_lifeExp = max(lifeExp))
 ```
 
+We then look at how many levels we have in this new dataset.
+
 ```{r}
 gap_maxlife$country %>% 
   nlevels()
 ```
+140 levels is to much to display in a plot, so we will drop some levels and keep only countries in Europe. 
 
 ```{r}
 gap_europe <- gap_maxlife %>% 
@@ -85,6 +98,7 @@ gap_europe <- gap_maxlife %>%
   droplevels()
 ```
 
+We now make our plot. 
 
 ```{r}
 gap_europe %>% 
@@ -95,7 +109,7 @@ gap_europe %>%
   coord_flip() +
   theme_light()
 ```
-
+The plot above could be more informative by putting our levels in ascendent order based on each level's life expectancy. 
 
 
 ```{r}
@@ -120,33 +134,25 @@ gapminder_ame <- gapminder %>%
 ```
 
 Now we write a csv of the filtered data.
+
 ```{r}
 write_csv(gapminder_ame,
           here::here("hw05", "gapminder_ame.csv"))
 ```
+
 Now, when our collegues open the file, they would use the function 'read_csv'. 
 
 ```{r}
 gapminder_ame_csv <- read_csv(here("hw05", "gapminder_ame.csv"))
 
 gapminder_ame_csv %>%
-  knitr::kable()
-```
-However, notice that the variable country has now become a character: 
-```{r}
-class(gapminder_ame_csv$country)
-class(gapminder_ame_csv$continent)
-class(gapminder_ame_csv$year)
-class(gapminder_ame_csv$lifeExp)
-class(gapminder_ame_csv$pop)
-class(gapminder_ame_csv$gdpPercap)
+  DT::datatable()
 ```
 
-To make it a factor again we do the following: 
+However, notice that the variable country has now become a character, so we should warn our collegues that this must be transformed into a factor by using the mutate() function.
+
 ```{r}
-gapminder_ame_csv %>% 
-  mutate(country = fct_reorder(country, pop, .desc = TRUE)) %>% 
-  arrange(continent)
+class(gapminder_ame_csv$country)
 ```
 
 
@@ -168,17 +174,13 @@ new_plot <- gapminder %>%
   ylab("Population") +
   xlab("Continent") +
   scale_y_continuous(labels = scales::comma) +
-  theme_light() +
-  theme(panel.border = element_blank(),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        axis.ticks = element_blank(),
-        axis.text = element_blank())
+  theme_light()
 ```
 
-```{r}
+```{r, fig.height=5, fig.width=12}
 plots <- plot_grid(old_plot, new_plot, ncol = 2,
           labels = c("Old plot", "New plot")) 
+plots
 ```
 
 
