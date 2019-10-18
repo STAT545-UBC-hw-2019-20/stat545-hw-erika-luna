@@ -155,13 +155,7 @@ However, notice that the variable continent has now become a character.
 class(gapminder_ame_csv$continent)
 ```
 
-So we should warn our collegues that this must be transformed into a factor:
-
-```{r}
-
-```
-
-
+So we should warn our collegues that this must be transformed into a factor. 
 
 
 # Exercise 4: Visualization design
@@ -210,7 +204,7 @@ ggsave(plots_file,
 ```
 
 
-
+![*A better version of a plot from assignment 1*](./plots/plots.png)
 
 
 
