@@ -149,11 +149,18 @@ gapminder_ame_csv %>%
   DT::datatable()
 ```
 
-However, notice that the variable country has now become a character, so we should warn our collegues that this must be transformed into a factor by using the mutate() function.
+However, notice that the variable continent has now become a character.
 
 ```{r}
-class(gapminder_ame_csv$country)
+class(gapminder_ame_csv$continent)
 ```
+
+So we should warn our collegues that this must be transformed into a factor:
+
+```{r}
+
+```
+
 
 
 
